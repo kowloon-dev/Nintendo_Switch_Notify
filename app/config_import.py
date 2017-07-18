@@ -35,9 +35,3 @@ result_file =     result_file_dir + config.get('GetWebsite', 'result_file')
 logging_level = config.get('Logging', 'logging_level')
 log_dir = pardir_path + "/log/"
 log_filename = log_dir + config.get('Logging', 'log_filename')
-
-
-# ------------  Construct Flask Parameters  ------------
-
-flask_static_path =    "/static"
-flask_templates_path = "/templates"
