@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import logging
 import traceback
 import config_import as ci
 import log_control as log
@@ -21,13 +20,14 @@ class MailSend:
             self.to_addr = ci.to_addr
             self.mail_title = ci.mail_title
             self.mail_body = ci.mail_body
+            self.item_url = ci.item_url
         except:
             log.logging.error(traceback.format_exc())
             raise
 
-    def mail_send(self, now, status):
+    def mail_send(self, now):
 
-        self.mail_body = self.now + "\n" + self.mail_body + "\n" + self.status
+        self.mail_body = self.now + "\n" + self.mail_body + "\n" + self.item_url
 
         # Establish SMTP connection.(with SMTPAUTH)
         smtp = smtplib.SMTP(self.smtp_host, self.smtp_port)
@@ -44,4 +44,4 @@ class MailSend:
             smtp.quit()
             log.logging.error(
                 "Sending mail has failed. ")
-            return
+            raise

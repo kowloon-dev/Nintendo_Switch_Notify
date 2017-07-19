@@ -14,16 +14,17 @@ class SlackPost:
         try:
             self.webhook_url = ci.webhook_url
             self.slack_body = ci.slack_body
+            self.item_url = ci.item_url
         except:
             log.logging.error(traceback.format_exc())
             raise
 
-    def slack_post(self, now, status):
+    def slack_post(self, now):
 
         # Build request header and payload
         headers = {'Content-Type': 'Application/json'}
 
-        self.slack_body = {"text": now + "\n" + self.slack_body + "\n" + "状況: " + status}
+        self.slack_body = {"text": now + "\n" + self.slack_body + "\n" + self.item_url }
 
         # Execute POST request
         try:

@@ -9,7 +9,7 @@ import mail_notify as mn
 import slack_notify as sn
 import traceback
 
-
+# Get notify method (Slack or Mail)
 try:
     notify_method = ci.notify_method
 except:
@@ -42,10 +42,18 @@ print(status)
 #check_result = True
 
 if check_result is True:
-    sp = sn.SlackPost()
-    sp.slack_post(now, status)
-    log.logging.info('Check result is positive. Notify has executed.')
-    exit(0)
+
+    if notify_method == "Slack":
+        sp = sn.SlackPost()
+        sp.slack_post(now)
+        log.logging.info('Check result is positive. Notify has executed.')
+        exit(0)
+    elif notify_method == "Mail":
+        ms = mn.MailSend()
+        ms.mail_send(now)
+        log.logging.info('Check result is positive. Notify has executed.')
+        exit(0)
+
 elif check_result is False:
     log.logging.info('Check result is negative. Notify has skipped.')
     exit(0)
