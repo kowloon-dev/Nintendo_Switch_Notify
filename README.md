@@ -1,7 +1,7 @@
 
 # 概要
 
-ヨドバシのNintendo Switchの商品サイトを定期チェックし、在庫状況の変化を検知したら
+ヨドバシのNintendo Switchの商品サイトを定期チェックし、在庫状況の変化を検知したら  
 Slackもしくはメールで通知してくれるPythonスクリプトです。
 
 **Slack通知の例**
@@ -26,14 +26,14 @@ Slackもしくはメールで通知してくれるPythonスクリプトです。
 
 ## 1. BeautifulSoupをインストール
 
-htmlのスクレイピングにBeautifulSoupが必要なので、
+htmlのスクレイピングにBeautifulSoupが必要なので、  
 入ってない場合はインストールします。
 
 ```
 $ pip3 install bs4
 ```
 
-確認
+インポートできるか確認します。
 
 ```
 $ python3
@@ -52,6 +52,8 @@ $ git clone git@github.com:kowloon-dev/Nintendo_Switch_Notify.git
 
 ## 3. 設定ファイルに追記
 
+通知手段をSlackかメールのいずれか指定します。
+
 ```
 $ vi Nintendo_Switch_Notify/config/config.ini
 
@@ -60,7 +62,7 @@ notify_method = Slack    Slack通知の場合は"Slack"、メール通知は"Mai
 
 ```
 
-Slack通知を行う場合
+Slack通知を行う場合は、webhook URLの設定を追加します。
 
 ```
 [Slack]
@@ -68,7 +70,7 @@ webhook_url =   https://hooks.slack.com/(あなたのSlack Webhook URLに書き�
 
 ```
 
-Mail通知を行う場合
+Mail通知を行う場合は、メールサーバ関連の設定を追加します。
 
 ```
 [Mail]
@@ -85,8 +87,8 @@ mail_body =     Switchの在庫が回復した可能性があります。  メ�
 
 ## 4. テスト実行
 
-python3に直接"switch_check.py"を渡して実行します。
-標準出力に以下が出ればOKです。
+python3に直接"switch_check.py"を渡して実行します。  
+標準出力に以下が出ればOKです。  
 
 - 1行目: チェック結果(False: Switchの在庫無し、True: 在庫ありの可能性あり)
 - 2行目: スクレイピングの結果、抽出された在庫状況
@@ -100,7 +102,7 @@ False                       ←チェック結果
 
 ## 5. 通知機能のテスト
 
-"switch_check.py"の中でチェック結果を強制的に"True"に書き換えて
+"switch_check.py"の中でチェック結果を強制的に"True"に書き換えて  
 Slack/Mailに通知が来るか確認します。
 
 ```
@@ -114,7 +116,7 @@ check_result = True  ←コメントアウトを外してください
 $ python3 switch_check.py
 ```
 
-通知が届いたことを確認します。
+通知が届いたことを確認します。  
 
 **Slack通知の例**
 
@@ -126,7 +128,7 @@ $ python3 switch_check.py
 ![メール通知の例](http://archive.kowloonet.org/github/switch_check_mail.png)
 
 
-確認がとれたら、デバッグ用の処理を元に戻します。
+確認がとれたら、デバッグ用の処理を元に戻します。  
 
 ```
 vi switch_check.py
@@ -137,7 +139,7 @@ vi switch_check.py
 
 ## 6. cronに登録
 
-以下は30分おきにチェックを実行する場合のCron設定です。
+以下は30分おきにチェックを実行する場合のCron設定です。  
 実行感覚はお好みで調整して下さい。
 
 ```
@@ -167,8 +169,8 @@ $ tail log.txt
 
 ## 1. Webページの取得
 
-ヨドバシのNintendo Switch商品ページ( http://www.yodobashi.com/product/100000001003431565/ )を取得します。
-(Pythonのrequestsモジュールを使用)
+ヨドバシのNintendo Switch商品ページ( http://www.yodobashi.com/product/100000001003431565/ )を取得します。  
+(Pythonのrequestsモジュールを使用)  
 
 web_scraping.py
 
@@ -185,8 +187,8 @@ web_scraping.py
 
 ## 2. スクレイピング
 
-取得したページをBeautifulSoupでスクレイピングします。
-今回は在庫状況として"予定数の販売を終了しました"という文字列を格納しているタグを探して取得します。
+取得したページをBeautifulSoupでスクレイピングします。  
+今回は在庫状況として"**予定数の販売を終了しました**"という文字列を格納しているタグを探して取得します。
 
 ![在庫ページ](http://archive.kowloonet.org/github/switch_webpage.png)
 
@@ -201,7 +203,7 @@ web_scraping.py
 - タグは"div"タグ
 - クラス名は"salesInfo"
 
-をBeautifulSoupのfind関数で取得します。
+をBeautifulSoupのfind関数で取得します。  
 
 web_scraping.py
 
@@ -220,15 +222,15 @@ web_scraping.py
 
 ## 3. 判定処理
 
-取得したタグの中身を判定します。
+取得したタグの中身を判定します。  
 
-今回は、在庫が復活した場合に該当箇所がどう変化するのか
-("予約受付中"かもしれないし"在庫有り","在庫僅少"かもしれない)
-事前に正確に予測できないため、以下のロジックとしました。
+今回は、在庫が復活した場合に該当箇所がどう変化するのか  
+("予約受付中"かもしれないし"在庫有り","在庫僅少"かもしれない)  
+事前に正確に予測できないため、以下のロジックとしました。  
 
-- スクレイピングした行に"予定数の販売を終了しました"にマッチする文字列があれば
+- スクレイピングした行に"予定数の販売を終了しました"にマッチする文字列があれば  
   "在庫無しが確定"なので、チェック結果は"False"を返して終了
-- 上記以外の場合は、何かしら在庫状況が変化したことを意味するので
+- 上記以外の場合は、何かしら在庫状況が変化したことを意味するので  
   "在庫が復活した可能性あり"としてチェック結果は"True"を返す
 
 
@@ -247,10 +249,10 @@ web_scraping.py
 
 ## 4. 通知処理
 
-前項の結果が"True"(在庫が回復した可能性がある)の場合は、
+前項の結果が"True"(在庫が回復した可能性がある)の場合は、  
 ユーザが指定した方法(Slack/Mail)で通知を行います。
 
-呼び出し側の処理:
+呼び出し側の処理:  
 switch_check.py
 
 ```
@@ -270,7 +272,7 @@ elif check_result is False:       # Falseの場合は何もせず終了
     exit(0)
 ```
 
-呼ばれる側の処理(Slack):
+呼ばれる側の処理(Slack):  
 slack_notify.py
 
 ```
@@ -289,7 +291,7 @@ def slack_post(self, now):  # 現在時刻を受け取り(本文に使う)
         exit(99)
 ```
 
-呼ばれる側の処理(Mail):
+呼ばれる側の処理(Mail):  
 mail_notify.py
 
 ```
@@ -320,6 +322,7 @@ def mail_send(self, now):
 
 ## 一度通知した後、後続の通知を抑制する処理がない
 
-"通知済み"を示すフラグ処理がないため、
-在庫回復を検知してメール通知を行った後、次のcron実行がされるとまた通知を行ってしまう。
-(管理者がCronを止めるまで延々と続く)
+"通知済み"を示すフラグ処理がないため、  
+在庫回復を検知してメール通知を行った後、次のcron実行がされるとまた通知を行ってしまいます。  
+(管理者がCronを止めるまで延々と続く)  
+
