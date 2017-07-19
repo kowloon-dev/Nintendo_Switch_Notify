@@ -42,7 +42,6 @@ print(status)
 #check_result = True
 
 if check_result is True:
-
     if notify_method == "Slack":
         sp = sn.SlackPost()
         sp.slack_post(now)
@@ -53,7 +52,6 @@ if check_result is True:
         ms.mail_send(now)
         log.logging.info('Check result is positive. Notify has executed.')
         exit(0)
-
 elif check_result is False:
     log.logging.info('Check result is negative. Notify has skipped.')
     exit(0)
