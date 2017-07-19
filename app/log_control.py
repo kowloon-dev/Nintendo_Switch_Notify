@@ -3,7 +3,7 @@
 
 import logging
 import traceback
-import app.config_import as ci
+import config_import as ci
 
 try:
     logging_level = ci.logging_level
