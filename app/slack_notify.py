@@ -4,8 +4,8 @@
 import json
 import requests
 import traceback
-import app.config_import as ci
-import app.log_control as log
+import config_import as ci
+import log_control as log
 
 
 class SlackPost:

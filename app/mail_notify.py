@@ -3,8 +3,8 @@
 
 import logging
 import traceback
-import app.config_import as ci
-import app.log_control as log
+import config_import as ci
+import log_control as log
 import smtplib
 from email.mime.text import MIMEText
 

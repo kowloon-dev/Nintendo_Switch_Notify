@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-import app.config_import as ci
-import app.log_control as log
-import app.web_scraping as ws
-import app.mail_notify as mn
-import app.slack_notify as sn
+import config_import as ci
+import log_control as log
+import web_scraping as ws
+import mail_notify as mn
+import slack_notify as sn
 import traceback
 
 
