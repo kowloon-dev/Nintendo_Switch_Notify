@@ -27,7 +27,7 @@ class MailSend:
 
     def mail_send(self, now):
 
-        self.mail_body = self.now + "\n" + self.mail_body + "\n" + self.item_url
+        self.mail_body = now + "\n" + self.mail_body + "\n" + self.item_url
 
         # Establish SMTP connection.(with SMTPAUTH)
         smtp = smtplib.SMTP(self.smtp_host, self.smtp_port)
