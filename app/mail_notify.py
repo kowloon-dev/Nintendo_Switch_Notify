@@ -1,35 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from os import pardir
-from os.path import dirname
-from os.path import sep
 import logging
-import configparser
 import traceback
+import app.config_import as ci
 import app.log_control as log
 import smtplib
 from email.mime.text import MIMEText
 
 class MailSend:
     def __init__(self):
-        # Construct config_file path & read config file
+        # Read config
         try:
-            pardir_path = dirname(__file__) + sep + pardir
-            config_file = pardir_path + "/config/config_mail.ini"
-            config = configparser.ConfigParser()
-            config.read(config_file)
-            self.smtp_host = config.get('Mail', 'smtp_host')
-            self.smtp_port = config.get('Mail', 'smtp_port')
-            self.local_host = config.get('Mail', 'local_host')
-            self.auth_id = config.get('Mail', 'smtpauth_id')
-            self.auth_pass = config.get('Mail', 'smtpauth_pass')
-            self.from_addr = config.get('Mail', 'from_addr')
-            self.to_addr = config.get('Mail', 'to_addr')
-            self.mail_title = config.get('Mail', 'mail_title')
-            self.mail_body = config.get('Mail', 'mail_body')
+            self.smtp_host = ci.smtp_host
+            self.smtp_port = ci.smtp_port
+            self.local_host = ci.local_host
+            self.auth_id = ci.smtpauth_id
+            self.auth_pass = ci.smtpauth_pass
+            self.from_addr = ci.from_addr
+            self.to_addr = ci.to_addr
+            self.mail_title = ci.mail_title
+            self.mail_body = ci.mail_body
         except:
-            logging.error(traceback.format_exc())
+            log.logging.error(traceback.format_exc())
             raise
 
     def mail_send(self, now, status):
