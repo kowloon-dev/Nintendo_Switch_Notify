@@ -167,7 +167,7 @@ $ tail log.txt
 
 ## 1. Webページの取得
 
-ヨドバシのNintendo Switch商品ページ(http://www.yodobashi.com/product/100000001003431565/)を取得します。
+ヨドバシのNintendo Switch商品ページ( http://www.yodobashi.com/product/100000001003431565/ )を取得します。  
 (Pythonのrequestsモジュールを使用)
 
 web_scraping.py
