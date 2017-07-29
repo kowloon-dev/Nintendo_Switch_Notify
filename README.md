@@ -203,29 +203,30 @@ web_scraping.py
 - タグは"div"タグ
 - クラス名は"salesInfo"
 
-をBeautifulSoupのfind関数で取得します。  
+をBeautifulSoupのfindAll関数で取得します
 
 web_scraping.py
 
 ```
     def scraping(self, get_result):
-
         # Parse the html code.
         soup = BeautifulSoup(get_result.text, "html.parser")
 
         # Find the class.
-        scraped_code = soup.find(self.tag_name, class_=self.tag_class)
+        scraped_code = soup.findAll(self.tag_name)
 ```
 
 変数"self.tag_name"に"div"が、変数"self.tag_class"に"salesInfo"が入っています。
 
+findAll関数なので、戻り値はリスト型の結果セットとなっています。  
+これを後続のforループで1行ずつ評価します。  
 
 ## 3. 判定処理
 
 取得したタグの中身を判定します。  
 
 今回は、在庫が復活した場合に該当箇所がどう変化するのか  
-("予約受付中"かもしれないし"在庫有り","在庫僅少"かもしれない)  
+("予約受付中"かもしれないし"在庫有り","在庫僅少"かもしれない、タグ自体が変わるかもしれない)  
 事前に正確に予測できないため、以下のロジックとしました。  
 
 - スクレイピングした行に"予定数の販売を終了しました"にマッチする文字列があれば  
@@ -233,18 +234,41 @@ web_scraping.py
 - 上記以外の場合は、何かしら在庫状況が変化したことを意味するので  
   "在庫が復活した可能性あり"としてチェック結果は"True"を返す
 
+まず、「タグ自体が変わってしまった」ことに対応するため、  
+findAllの結果セットの長さが0の場合は問答無用でFalseを返します。  
 
 web_scraping.py
 
 ```
-        if scraped_code.string == self.keyword:
+        # If the result of findAll() is None, set 'False' to the 'check_result' and return.
+        if len(scraped_code) == 0:
             check_result = False
-            log.logging.info("Negative keyword found! (HTML code: " + str(scraped_code) + ")")
-        else:
-            check_result = True
-            log.logging.info("Negative keyword NOT found! (HTML code: " + str(scraped_code) + ")")
+            scraped_text = "None"
+            log.logging.info("tag NOT found! (HTML code: " + str(scraped_code) + ")")
+            return check_result, scraped_text
+```
 
-        return check_result, scraped_code.string
+上記のif条件にマッチしないと言うことは、findAllの結果がなにがしか入っていることを  
+意味しますので、リストの中身を1行ずつ評価し、最後に  
+チェック結果を変数"check_result"、対象の文字列を変数"scraped_text"で返します。
+
+web_scraping.py
+
+```
+        for line in scraped_code:
+            # If the keyword is found in scraped_code, return True.
+            # In other cases, return False.
+            value = str(line.string)
+            if self.keyword in value:
+                check_result = True
+                scraped_text = value
+                log.logging.info("keyword found! (HTML code: " + str(line) + ")")
+                break
+            else:
+                check_result = False
+                scraped_text = value
+
+        return check_result, scraped_text
 ```
 
 ## 4. 通知処理
