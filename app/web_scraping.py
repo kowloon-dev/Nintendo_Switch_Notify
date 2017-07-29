@@ -57,20 +57,30 @@ class GetWebsite:
         return get_result
 
     def scraping(self, get_result):
-
         # Parse the html code.
         soup = BeautifulSoup(get_result.text, "html.parser")
 
         # Find the class.
-        scraped_code = soup.find(self.tag_name, class_=self.tag_class)
+        scraped_code = soup.findAll(self.tag_name)
 
-        # タグの中身が文字列「予定数の販売を終了しました」の場合はチェック結果:False で返す
-        # 上記以外の場合は"在庫状況が好転した可能性あり"とし、チェック結果:True で返す
-        if scraped_code.string == self.keyword:
+        # If the result of findAll() is None, set 'False' to the 'check_result' and return.
+        if len(scraped_code) == 0:
             check_result = False
-            log.logging.info("Negative keyword found! (HTML code: " + str(scraped_code) + ")")
-        else:
-            check_result = True
-            log.logging.info("Negative keyword NOT found! (HTML code: " + str(scraped_code) + ")")
+            scraped_text = "None"
+            log.logging.info("tag NOT found! (HTML code: " + str(scraped_code) + ")")
+            return check_result, scraped_text
 
-        return check_result, scraped_code.string
+        for line in scraped_code:
+            # If the keyword is found in scraped_code, return True.
+            # In other cases, return False.
+            value = str(line.string)
+            if self.keyword in value:
+                check_result = True
+                scraped_text = value
+                log.logging.info("keyword found! (HTML code: " + str(line) + ")")
+                break
+            else:
+                check_result = False
+                scraped_text = value
+
+        return check_result, scraped_text
