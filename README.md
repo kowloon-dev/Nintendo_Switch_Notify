@@ -218,7 +218,7 @@ web_scraping.py
         soup = BeautifulSoup(get_result.text, "html.parser")
 
         # Find the class.
-        scraped_code = soup.findAll(self.tag_name)
+        scraped_code = soup.findAll(self.tag_name, class_=self.tag_class)
 ```
 
 変数"self.tag_name"に"div"が、変数"self.tag_class"に"salesInfo"が入っています。
