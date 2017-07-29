@@ -203,7 +203,12 @@ web_scraping.py
 - タグは"div"タグ
 - クラス名は"salesInfo"
 
-をBeautifulSoupのfindAll関数で取得します
+をBeautifulSoupのfindAll関数で取得します。  
+
+【補足】  
+標的のタグが1つだけなので、今回のケースはfind関数(最初にマッチしたタグだけ取得)でも支障はないのですが、  
+コードの汎用性・再利用性重視で敢えてfindAll関数を採用しています。  
+
 
 web_scraping.py
 
