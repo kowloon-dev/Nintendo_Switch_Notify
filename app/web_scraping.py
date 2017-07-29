@@ -75,12 +75,12 @@ class GetWebsite:
             # In other cases, return False.
             value = str(line.string)
             if self.keyword in value:
-                check_result = True
+                check_result = False
                 scraped_text = value
-                log.logging.info("keyword found! (HTML code: " + str(line) + ")")
+                log.logging.info("Negative keyword found! (HTML code: " + str(line) + ")")
                 break
             else:
-                check_result = False
+                check_result = True
                 scraped_text = value
 
         return check_result, scraped_text

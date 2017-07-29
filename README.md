@@ -249,8 +249,12 @@ web_scraping.py
 ```
 
 上記のif条件にマッチしないと言うことは、findAllの結果がなにがしか入っていることを  
-意味しますので、リストの中身を1行ずつ評価し、最後に  
-チェック結果を変数"check_result"、対象の文字列を変数"scraped_text"で返します。
+意味しますので、リストの中身を1行ずつ評価し、
+
+- キーワード"予定数の販売を終了しました"が見つかった → FalseをセットしてBreak
+- 見つからない →True をセットしてループの先頭に戻り、次の行を評価
+
+最後にチェック結果を変数"check_result"、対象の文字列を変数"scraped_text"で返します。
 
 web_scraping.py
 
@@ -260,15 +264,13 @@ web_scraping.py
             # In other cases, return False.
             value = str(line.string)
             if self.keyword in value:
-                check_result = True
-                scraped_text = value
-                log.logging.info("keyword found! (HTML code: " + str(line) + ")")
-                break
-            else:
                 check_result = False
                 scraped_text = value
-
-        return check_result, scraped_text
+                log.logging.info("Negative keyword found! (HTML code: " + str(line) + ")")
+                break
+            else:
+                check_result = True
+                scraped_text = value
 ```
 
 ## 4. 通知処理
