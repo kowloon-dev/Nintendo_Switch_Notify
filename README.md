@@ -177,7 +177,7 @@ web_scraping.py
 ```
     def get_website(self):
 
-        while True:
+        <snip>
             # GET Website
             get_result = requests.get(self.item_url)
 ```

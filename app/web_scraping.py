@@ -61,7 +61,7 @@ class GetWebsite:
         soup = BeautifulSoup(get_result.text, "html.parser")
 
         # Find the class.
-        scraped_code = soup.findAll(self.tag_name)
+        scraped_code = soup.findAll(self.tag_name, class_=self.tag_class)
 
         # If the result of findAll() is None, set 'False' to the 'check_result' and return.
         if len(scraped_code) == 0:
