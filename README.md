@@ -30,7 +30,7 @@ htmlのスクレイピングにBeautifulSoupが必要なので、
 入ってない場合はインストールします。
 
 ```
-$ pip3 install bs4
+$ sudo pip3 install bs4
 ```
 
 インポートできるか確認します。
